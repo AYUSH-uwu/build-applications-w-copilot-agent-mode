@@ -1,11 +1,12 @@
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-const logo = process.env.PUBLIC_URL + '/octofitapp-small.png';
 import Activities from './components/Activities';
 import Leaderboard from './components/Leaderboard';
 import Teams from './components/Teams';
 import Users from './components/Users';
 import Workouts from './components/Workouts';
+const logo = process.env.PUBLIC_URL + '/octofitapp-small.png';
 
 function App() {
   return (

@@ -14,22 +14,41 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.http import JsonResponse
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 import os
 
-def api_root(request):
-    codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
-    base_url = f"https://{codespace_name}-8000.app.github.dev" if codespace_name != 'localhost' else "http://localhost:8000"
-    return JsonResponse({
-        "users": f"{base_url}/api/users/",
-        "teams": f"{base_url}/api/teams/",
-        "activities": f"{base_url}/api/activities/",
-        "leaderboard": f"{base_url}/api/leaderboard/",
-        "workouts": f"{base_url}/api/workouts/"
+
+from .views import UserViewSet, TeamViewSet, ActivityViewSet, WorkoutViewSet, LeaderboardViewSet
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'teams', TeamViewSet, basename='team')
+router.register(r'activities', ActivityViewSet, basename='activity')
+router.register(r'leaderboard', LeaderboardViewSet, basename='leaderboard')
+router.register(r'workouts', WorkoutViewSet, basename='workout')
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    codespace_name = os.environ.get('CODESPACE_NAME')
+    if codespace_name:
+        base_url = f"https://{codespace_name}-8000.app.github.dev"
+    else:
+        base_url = "http://localhost:8000"
+    return Response({
+        'users': f'{base_url}/api/users/',
+        'teams': f'{base_url}/api/teams/',
+        'activities': f'{base_url}/api/activities/',
+        'leaderboard': f'{base_url}/api/leaderboard/',
+        'workouts': f'{base_url}/api/workouts/',
     })
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', api_root, name='api_root'),
+    path('', api_root, name='api-root'),
+    path('api/', api_root, name='api-root'),
+    path('api/', include(router.urls)),
 ]

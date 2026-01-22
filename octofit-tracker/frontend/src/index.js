@@ -1,11 +1,11 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-console.log('REACT_APP_CODESPACE_NAME:', process.env.REACT_APP_CODESPACE_NAME);
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+console.log('REACT_APP_CODESPACE_NAME:', process.env.REACT_APP_CODESPACE_NAME);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
